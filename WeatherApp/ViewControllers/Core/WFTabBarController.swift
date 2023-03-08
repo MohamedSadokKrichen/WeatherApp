@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// Tab Bar controller to encapsulate our two view controllers
 class WFTabBarController: UITabBarController {
 
     override func viewDidLoad() {
@@ -28,9 +29,14 @@ class WFTabBarController: UITabBarController {
                                        image: UIImage(named: "cities"),
                                        tag: 1)
         nav2.tabBarItem = UITabBarItem(title: "Add City",
-                                       image: UIImage(),
+                                       image: UIImage(named: "add"),
                                        tag: 2)
         
+        for nav in [nav1, nav2] {
+            nav.navigationBar.prefersLargeTitles = true
+        }
+        setViewControllers([nav1, nav2],
+                           animated: true)
     }
 
 }

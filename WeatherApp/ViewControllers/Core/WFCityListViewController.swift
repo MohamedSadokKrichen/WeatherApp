@@ -14,15 +14,17 @@ class WFCityListViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .white
+        title = "Cities"
         
-        WeatherApiCalls.shared.getWeatherInfo(for: "Paris") { result in
-            switch result {
-            case .success(let success):
-                print(success.weather?.first?.description ?? "")
-            case .failure(let failure):
-                print(failure)
-            }
-        }
+//        WeatherApiCalls.shared.getWeatherInfo(for: "Paris") { result in
+//            switch result {
+//            case .success(let success):
+//                print(success.weather?.first?.description ?? "")
+//            case .failure(let failure):
+//                print(failure)
+//            }
+//        }
     }
 
 
