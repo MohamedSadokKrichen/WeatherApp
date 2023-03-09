@@ -13,9 +13,6 @@ final class CityDBManager {
     public static let shared = CityDBManager()
     
     public func saveNewCity(with name: String) {
-        let city = Cities()
-        city.cityName = name
-        city.lastTemp = 0.0
         let context = getManagedObjectContext()
         guard let entityDescription = NSEntityDescription.entity(forEntityName: "Cities", in: context) else { return }
         let newCity = NSManagedObject(entity: entityDescription, insertInto: context)

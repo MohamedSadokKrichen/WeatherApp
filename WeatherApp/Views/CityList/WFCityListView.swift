@@ -32,7 +32,12 @@ class WFCityListView: UIView {
         super.init(frame: frame)
         translatesAutoresizingMaskIntoConstraints = false
         spinner.startAnimating()
+        viewModel.delegate = self
+        viewModel.fetchCitiesList()
+        addSubview(spinner)
+        addSubview(tableView)
         addConstraints()
+        configuretableView()
     }
     
     required init?(coder: NSCoder) {
@@ -54,6 +59,8 @@ class WFCityListView: UIView {
     }
     
     private func configuretableView() {
+        tableView.register(WFCityListTableViewCell.self, forCellReuseIdentifier: WFCityListTableViewCell.cellIdentifier)
+        tableView.backgroundColor = .clear
         tableView.delegate = viewModel
         tableView.dataSource = viewModel
     }
@@ -62,6 +69,7 @@ class WFCityListView: UIView {
 
 extension WFCityListView: WFCityListViewViewModelDelegate {
     func didLoadCityList() {
+        print("Entering delegate method")
         spinner.stopAnimating()
         tableView.reloadData()
         tableView.isHidden = false

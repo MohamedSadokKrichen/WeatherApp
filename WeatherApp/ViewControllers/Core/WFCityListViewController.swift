@@ -11,20 +11,21 @@ import WeatherAPIFramework
 
 class WFCityListViewController: UIViewController {
     
-
+    private let wfCityListView = WFCityListView()
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+//        view.backgroundColor = UIColor(red: 122.0/255.0, green: 207.0/255.0, blue: 245.0/255.0, alpha: 1.0)
         title = "Cities"
         
-//        WeatherApiCalls.shared.getWeatherInfo(for: "Paris") { result in
-//            switch result {
-//            case .success(let success):
-//                print(success.weather?.first?.description ?? "")
-//            case .failure(let failure):
-//                print(failure)
-//            }
-//        }
+        view.addSubview(wfCityListView)
+        NSLayoutConstraint.activate([
+            wfCityListView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            wfCityListView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
+            wfCityListView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
+            wfCityListView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
+        
+        
     }
 
 

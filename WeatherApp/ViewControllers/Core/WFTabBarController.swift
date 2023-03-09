@@ -12,12 +12,14 @@ class WFTabBarController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = UIColor(red: 122.0/255.0, green: 207.0/255.0, blue: 245.0/255.0, alpha: 1.0)
         setupTabBar()
     }
     
     private func setupTabBar() {
         let cityListVC = WFCityListViewController()
-        let addCityVC = WFAddCityViewController()
+        let addCitySB = UIStoryboard(name: "AddCity", bundle: nil)
+        let addCityVC = addCitySB.instantiateViewController(withIdentifier: "WFAddCityViewController")
         
         cityListVC.navigationItem.largeTitleDisplayMode = .automatic
         addCityVC.navigationItem.largeTitleDisplayMode = .automatic
