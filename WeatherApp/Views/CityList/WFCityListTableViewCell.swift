@@ -85,24 +85,13 @@ class WFCityListTableViewCell: UITableViewCell {
         super.prepareForReuse()
         cityNameLabel.text = nil
         cityTempLabel.text = nil
+        iconImageView.image = nil
     }
     
     public func configure(with viewModel: WFCityListTableViewCellViewModel) {
         cityNameLabel.text = viewModel.cityName
-        WeatherApiCalls.shared.getWeatherInfo(for: viewModel.cityName) {[weak self] result in
-            guard let self = self else {return}
-            switch result {
-            case .success(let success):
-                DispatchQueue.main.async {
-                    self.cityTempLabel.text = "\(Int(success.main?.temp ?? 0.0))°C"
-                    self.iconImageView.image = UIImage(named: success.weather?.first?.icon ?? "")
-                }
-                
-            case .failure(let failure):
-                print(failure)
-            }
-        }
-        
+        cityTempLabel.text = viewModel.cityTempString
+        iconImageView.image = UIImage(named: viewModel.imageName)
     }
 
 }

@@ -14,20 +14,27 @@ class WFCityListViewController: UIViewController {
     private let wfCityListView = WFCityListView()
     override func viewDidLoad() {
         super.viewDidLoad()
-//        view.backgroundColor = UIColor(red: 122.0/255.0, green: 207.0/255.0, blue: 245.0/255.0, alpha: 1.0)
         title = "Cities"
-        
+        setupView()
+    }
+    
+    private func setupView() {
         view.addSubview(wfCityListView)
+        wfCityListView.delegate = self
         NSLayoutConstraint.activate([
             wfCityListView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             wfCityListView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
             wfCityListView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
             wfCityListView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
-        
-        
     }
-
-
 }
 
+extension WFCityListViewController: WFCityListViewDelegate {
+    func shouldGotoCityDetails(city: Cities) {
+        let detailVC = WFCityDetailsViewController()
+        detailVC.city = city
+        detailVC.navigationItem.largeTitleDisplayMode = .never
+        navigationController?.pushViewController(detailVC, animated: false)
+    }
+}

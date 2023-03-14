@@ -7,9 +7,15 @@
 
 import UIKit
 
+protocol WFCityListViewDelegate: AnyObject {
+    func shouldGotoCityDetails(city: Cities)
+}
+
 class WFCityListView: UIView {
     
     private let viewModel = WFCityListViewViewModel()
+    
+    public weak var delegate: WFCityListViewDelegate?
 
     private let spinner: UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView(style: .white)
@@ -38,10 +44,15 @@ class WFCityListView: UIView {
         addSubview(tableView)
         addConstraints()
         configuretableView()
+        NotificationCenter.default.addObserver(self, selector: #selector(refetchCityList(_:)), name: Notification.Name("refreshCityList"), object: nil)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    @objc private func refetchCityList(_ sender: NSNotification) {
+        viewModel.fetchCitiesList()
     }
     
     private func addConstraints() {
@@ -69,15 +80,21 @@ class WFCityListView: UIView {
 
 extension WFCityListView: WFCityListViewViewModelDelegate {
     func didLoadCityList() {
-        print("Entering delegate method")
-        spinner.stopAnimating()
-        tableView.reloadData()
-        tableView.isHidden = false
-        UIView.animate(withDuration: 0.4) { [weak self] in
-            guard let self = self else { return }
-            self.tableView.alpha = 1
+        DispatchQueue.main.async {
+            self.spinner.stopAnimating()
+            self.tableView.reloadData()
+            self.tableView.isHidden = false
+            UIView.animate(withDuration: 0.4) { [weak self] in
+                guard let self = self else { return }
+                self.tableView.alpha = 1
+            }
         }
+        
+        
     }
     
+    func didSelectCity(city: Cities) {
+        self.delegate?.shouldGotoCityDetails(city: city)
+    }
     
 }

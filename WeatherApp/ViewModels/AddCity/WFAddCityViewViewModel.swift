@@ -10,6 +10,7 @@ import UIKit
 protocol WFAddCityViewViewModelDelegate: AnyObject {
     func shouldReloadTableViewData()
     func didSelectCityToSave(cityName: String)
+    func shouldReloadCityList()
 }
 
 
@@ -23,7 +24,8 @@ class WFAddCityViewViewModel: NSObject {
     public func populateTableViewFromJson() {
         guard let data = getJsonFileData() else { return }
         citiesList = serializeJsonData(data: data)
-        filteredCitiesList = serializeJsonData(data: data)
+        filteredCitiesList = citiesList
+        self.delegate?.shouldReloadTableViewData()
     }
     
     private func getJsonFileData() -> Data? {
@@ -59,7 +61,9 @@ class WFAddCityViewViewModel: NSObject {
     }
     
     public func saveCity(with name: String) {
+        CityDBManager.shared.delegate = self
         CityDBManager.shared.saveNewCity(with: name)
+        
     }
 }
 
@@ -83,5 +87,13 @@ extension WFAddCityViewViewModel: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.delegate?.didSelectCityToSave(cityName: filteredCitiesList[indexPath.row].name ?? "")
     }
+    
+}
+
+extension WFAddCityViewViewModel: CityDBManagerDelegate {
+    func didSaveNewCity() {
+        self.delegate?.shouldReloadCityList()
+    }
+    
     
 }

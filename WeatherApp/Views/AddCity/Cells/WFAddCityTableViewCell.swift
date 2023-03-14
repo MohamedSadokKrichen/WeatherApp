@@ -12,7 +12,9 @@ class WFAddCityTableViewCell: UITableViewCell {
     @IBOutlet weak var cityNameLabel: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
-        cityNameLabel.font = .systemFont(ofSize: 17)
+        cityNameLabel.font = .systemFont(ofSize: 20)
+        backgroundColor = .clear
+        selectionStyle = .none
     }
     
     override func prepareForReuse() {

@@ -10,17 +10,23 @@ import UIKit
 class WFAddCityViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var searchTextField: UITextField!
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
     let viewModel = WFAddCityViewViewModel()
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Add City"
+        spinner.hidesWhenStopped = true
         setupTableView()
+        self.hideKeyboardWhenTappedAround()
         viewModel.delegate = self
-        viewModel.populateTableViewFromJson()
+        searchTextField.isEnabled = false
+        DispatchQueue.global(qos: .background).async {
+            self.viewModel.populateTableViewFromJson()
+        }
         searchTextField.addTarget(self, action: #selector(findCity), for: .editingChanged)
     }
+    
     
     @objc private func findCity() {
         viewModel.searchForCity(with: searchTextField.text ?? "")
@@ -32,13 +38,14 @@ class WFAddCityViewController: UIViewController {
         tableView.dataSource = viewModel
     }
     
-    @IBAction func addButtonAction(_ sender: UIButton) {
-    }
-    
 }
 
 
 extension WFAddCityViewController: WFAddCityViewViewModelDelegate {
+    func shouldReloadCityList() {
+        NotificationCenter.default.post(Notification(name: Notification.Name("refreshCityList")))
+    }
+    
     func didSelectCityToSave(cityName: String) {
         let alertController = UIAlertController(title: "Weather App", message: "Do you really want to save this new city : \(cityName)", preferredStyle: .alert)
         let okButton = UIAlertAction(title: "Save", style: .default) {[weak self] _ in
@@ -53,7 +60,12 @@ extension WFAddCityViewController: WFAddCityViewViewModelDelegate {
     }
     
     func shouldReloadTableViewData() {
-        tableView.reloadData()
+        DispatchQueue.main.async {
+            self.spinner.stopAnimating()
+            self.tableView.reloadData()
+            self.searchTextField.isEnabled = true
+        }
+        
     }
     
     

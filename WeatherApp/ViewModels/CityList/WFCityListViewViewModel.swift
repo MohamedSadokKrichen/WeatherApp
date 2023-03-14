@@ -10,7 +10,7 @@ import WeatherAPIFramework
 
 protocol WFCityListViewViewModelDelegate: AnyObject {
     func didLoadCityList()
-//    func didSelectCity(weather: Weather)
+    func didSelectCity(city: Cities)
 }
 
 class WFCityListViewViewModel: NSObject {
@@ -43,7 +43,7 @@ extension WFCityListViewViewModel: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: WFCityListTableViewCell.cellIdentifier, for: indexPath) as? WFCityListTableViewCell else { fatalError("Unsupported cell") }
         let city = cities[indexPath.row]
-        let viewModel = WFCityListTableViewCellViewModel(cityName: city.cityName ?? "", cityTemp: Float(city.lastTemp))
+        let viewModel = WFCityListTableViewCellViewModel(cityName: city.cityName ?? "", imageName: city.iconName ?? "", cityTemp: Float(city.lastTemp))
         cell.configure(with: viewModel)
         return cell
     }
@@ -53,6 +53,7 @@ extension WFCityListViewViewModel: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        let selectedCity = cities[indexPath.row]
+        self.delegate?.didSelectCity(city: selectedCity)
     }
 }

@@ -6,17 +6,20 @@
 //
 
 import Foundation
+import WeatherAPIFramework
 
 class WFCityListTableViewCellViewModel {
     public let cityName : String
+    public let imageName : String
     private let cityTemp : Float
     
-    init(cityName: String, cityTemp: Float) {
+    init(cityName: String, imageName: String, cityTemp: Float) {
         self.cityName = cityName
+        self.imageName = imageName
         self.cityTemp = cityTemp
     }
     
     public var cityTempString : String {
-        return "\(cityTemp) °C"
+        return "\(Int(cityTemp))°C"
     }
 }
