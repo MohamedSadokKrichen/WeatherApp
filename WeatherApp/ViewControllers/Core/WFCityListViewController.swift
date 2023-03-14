@@ -11,20 +11,30 @@ import WeatherAPIFramework
 
 class WFCityListViewController: UIViewController {
     
-
+    private let wfCityListView = WFCityListView()
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        WeatherApiCalls.shared.getWeatherInfo(for: "Paris") { result in
-            switch result {
-            case .success(let success):
-                print(success.weather?.first?.description ?? "")
-            case .failure(let failure):
-                print(failure)
-            }
-        }
+        title = "Cities"
+        setupView()
     }
-
-
+    
+    private func setupView() {
+        view.addSubview(wfCityListView)
+        wfCityListView.delegate = self
+        NSLayoutConstraint.activate([
+            wfCityListView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            wfCityListView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
+            wfCityListView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
+            wfCityListView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
+    }
 }
 
+extension WFCityListViewController: WFCityListViewDelegate {
+    func shouldGotoCityDetails(city: Cities) {
+        let detailVC = WFCityDetailsViewController()
+        detailVC.city = city
+        detailVC.navigationItem.largeTitleDisplayMode = .never
+        navigationController?.pushViewController(detailVC, animated: false)
+    }
+}
